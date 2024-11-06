@@ -1,4 +1,3 @@
-
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
@@ -19,6 +18,7 @@ class AppConfig(BaseModel):
     """
     Application-level config
     """
+
     model_config = ConfigDict(strict=True, frozen=True)
 
     package_name: str
@@ -32,10 +32,11 @@ class ModelConfig(BaseModel):
     All configuration relevant to model
     training and feature engineering.
     """
+
     model_config = ConfigDict(
-        strict=True, 
+        strict=True,
         frozen=True,
-        protected_namespaces=()  # This removes the warning about model_ prefix
+        protected_namespaces=(),  # This removes the warning about model_ prefix
     )
 
     target: str
@@ -64,10 +65,11 @@ class ModelConfig(BaseModel):
 
 class MasterConfig(BaseModel):
     """Master config object"""
+
     model_config = ConfigDict(
-        strict=True, 
+        strict=True,
         frozen=True,
-        protected_namespaces=()  # This removes the warning about model_ prefix
+        protected_namespaces=(),  # This removes the warning about model_ prefix
     )
 
     app_config: AppConfig
@@ -86,7 +88,7 @@ def fetch_config_from_yaml(cfg_path: Optional[Path] = None) -> YAML:
     if not cfg_path:
         cfg_path = find_config_file()
     if cfg_path:
-        with open(cfg_path, 'r') as conf_file:
+        with open(cfg_path, "r") as conf_file:
             parsed_config = load(conf_file.read())
             return parsed_config
     raise OSError(f"Did not find config file at path: {cfg_path}")
@@ -99,14 +101,19 @@ def create_and_validate_config(parsed_config: YAML = None) -> MasterConfig:
 
     # Convert string values to appropriate types
     config_data = parsed_config.data
-    
+
     # Convert numeric strings to actual numbers
-    config_data['test_size'] = float(config_data['test_size'])
-    config_data['random_state'] = int(config_data['random_state'])
-    config_data['alpha'] = float(config_data['alpha'])
+    config_data["test_size"] = float(config_data["test_size"])
+    config_data["random_state"] = int(config_data["random_state"])
+    config_data["alpha"] = float(config_data["alpha"])
 
     # Convert mapping values to integers
-    for mapping_key in ['qual_mappings', 'exposure_mappings', 'garage_mappings', 'finish_mappings']:
+    for mapping_key in [
+        "qual_mappings",
+        "exposure_mappings",
+        "garage_mappings",
+        "finish_mappings",
+    ]:
         if mapping_key in config_data:
             config_data[mapping_key] = {
                 k: int(v) for k, v in config_data[mapping_key].items()
@@ -115,7 +122,7 @@ def create_and_validate_config(parsed_config: YAML = None) -> MasterConfig:
     # Create the config using model_validate
     _config = MasterConfig(
         app_config=AppConfig.model_validate(config_data),
-        model_settings=ModelConfig.model_validate(config_data)
+        model_settings=ModelConfig.model_validate(config_data),
     )
     return _config
 
