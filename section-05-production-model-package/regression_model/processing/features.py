@@ -3,6 +3,7 @@ from typing import List
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
+
 class TemporalVariableTransformer(BaseEstimator, TransformerMixin):
     """Temporal elapsed time transformer"""
 
@@ -12,11 +13,10 @@ class TemporalVariableTransformer(BaseEstimator, TransformerMixin):
         self.variables = variables
         self.reference_variable = reference_variable
 
-    
     def fit(self, X: pd.DataFrame, y: pd.Series = None):
         # we need this step to fit the sklearn pipeline
         return self
-    
+
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         # so that we do not over-write the original dataframe
         X = X.copy()
@@ -24,7 +24,8 @@ class TemporalVariableTransformer(BaseEstimator, TransformerMixin):
         for feature in self.variables:
             X[feature] = X[self.reference_variable] - X[feature]
         return X
-    
+
+
 class Mapper(BaseEstimator, TransformerMixin):
     """Categorical variable mapper."""
 
@@ -36,7 +37,7 @@ class Mapper(BaseEstimator, TransformerMixin):
 
     def fit(self, X: pd.DataFrame, y: pd.Series = None):
         return self
-    
+
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = X.copy()
         for feature in self.variables:

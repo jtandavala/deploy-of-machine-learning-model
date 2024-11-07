@@ -22,19 +22,20 @@ def drop_na_inputs(*, input_data: pd.DataFrame) -> pd.DataFrame:
     validated_data.dropna(subset=new_vars_with_na, inplace=True)
     return validated_data
 
+
 def validate_inputs(*, input_date: pd.DataFrame) -> Tuple[pd.DataFrame, Optional[Dict]]:
     """Check model inputs for unprocessable values."""
 
     # input syntax error filed names (beginning with numbers)
     input_date.rename(columns=config.model_settings.variables_to_rename, inplace=True)
-    input_date['MSSubClass'] = input_date['MSSubClass'].astype('O')
+    input_date["MSSubClass"] = input_date["MSSubClass"].astype("O")
     relevant_data = input_date[config.model_settings.features].copy()
     validated_data = drop_na_inputs(input_data=relevant_data)
     errors = None
 
     try:
         MultipleHouseDataInputs(
-            inputs=validated_data.replace({np.nan, None}).to_dict(orient='records')
+            inputs=validated_data.replace({np.nan, None}).to_dict(orient="records")
         )
     except ValidationError as e:
         errors = e.json()

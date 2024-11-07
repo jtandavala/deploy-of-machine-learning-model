@@ -15,7 +15,7 @@ def load_dataset(*, filename: str) -> pd.DataFrame:
     df["MSSubClass"] = df["MSSubClass"].astype("O")
 
     # rename variables beginning with numbers to avoid
-    transformed = df.rename(columns=config.model_config.variables_to_rename)
+    transformed = df.rename(columns=config.model_settings.variables_to_rename)
     return transformed
 
 
