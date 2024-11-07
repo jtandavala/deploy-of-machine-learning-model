@@ -10,7 +10,7 @@ test_data_file: test.csv
 target: SalePrice
 
 pipeline_name: regression_model
-pipeline_save_file: regression_model_output_v1
+pipeline_save_file: regression_model_output_v
 
 # Will cause syntax errors since they begin with numbers
 variables_to_rename:

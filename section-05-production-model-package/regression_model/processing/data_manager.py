@@ -9,6 +9,8 @@ from sklearn.pipeline import Pipeline
 from regression_model import __version__ as _version
 from regression_model.config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
 
+pd.set_option("future.no_silent_downcasting", True)
+
 
 def load_dataset(*, filename: str) -> pd.DataFrame:
     df = pd.read_csv(Path(f"{DATASET_DIR}/{filename}"))
@@ -17,6 +19,14 @@ def load_dataset(*, filename: str) -> pd.DataFrame:
     # rename variables beginning with numbers to avoid
     transformed = df.rename(columns=config.model_settings.variables_to_rename)
     return transformed
+
+
+def convert_categorical_to_object(X):
+    """Convert specified columns to object dtype"""
+    X = pd.DataFrame(X, columns=config.model_settings.features)
+    for var in config.model_settings.categorical_vars:
+        X[var] = X[var].astype("object")
+    return X
 
 
 def remove_old_pipeline(*, files_to_keep: t.List[str]) -> None:

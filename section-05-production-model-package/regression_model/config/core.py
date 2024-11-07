@@ -128,8 +128,3 @@ def create_and_validate_config(parsed_config: YAML = None) -> MasterConfig:
 
 
 config = create_and_validate_config()
-
-
-
-
-
