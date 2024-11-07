@@ -26,8 +26,7 @@ def run_training() -> None:
     # Log transform the target
     y_train = np.log(y_train)
 
-   
-    price_pipe.fit(X_train, y_train) 
+    price_pipe.fit(X_train, y_train)
     save_pipeline(pipeline_to_persist=price_pipe)
 
 

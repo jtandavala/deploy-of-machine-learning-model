@@ -1,4 +1,3 @@
-import pandas as pd
 from feature_engine.encoding import OrdinalEncoder, RareLabelEncoder
 from feature_engine.imputation import (
     AddMissingIndicator,
